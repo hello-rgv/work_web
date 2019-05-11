@@ -3,11 +3,11 @@
         <Layout>
             <Sider breakpoint="md" collapsible :collapsed-width="78" v-model="isCollapsed">
                 <Menu active-name="home" theme="dark" width="auto" :class="menuitemClasses">
-                    <MenuItem name="home">
+                    <MenuItem name="home" to="/">
                         <Icon type="ios-navigate"></Icon>
                         <span>首页</span>
                     </MenuItem>
-                    <MenuItem name="baseInfo">
+                    <MenuItem name="baseInfo" to="baseInfo">
                         <Icon type="ios-search"></Icon>
                         <span>基础信息</span>
                     </MenuItem>
@@ -21,7 +21,7 @@
             <Layout>
                 <Header class="header-bar"></Header>
                 <Content :style="{margin: '20px', background: '#fff', minHeight: '220px'}">
-                    Content
+                    <router-view />
                 </Content>
             </Layout>
         </Layout>
@@ -45,7 +45,7 @@
     }
 </script>
 
-<style>
+<style scoped>
   #app{
     font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
