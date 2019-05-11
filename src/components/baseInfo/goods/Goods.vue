@@ -5,27 +5,30 @@
         <Icon type="ios-boat"/>
         <span class="card-title">商品信息</span>
       </p>
-      <Row>
-        <!-- <Col span="6"></Col> -->
-        <!-- <Col span="18"> -->
-          <GoodsTable :isShowActionCol="showGoodsTableAction" @goodsEditInfo="getGoodsEditInfo" :searchValue="goodsSearchValue"></GoodsTable>
-        <!-- </Col> -->
+      <Row :gutter="20">
+        <Col span="6">
+          <GoodsForm></GoodsForm>
+        </Col>
+        <Col span="18">
+          <GoodsTable :isShowActionCol="showGoodsTableAction" @goodsEditInfo="getGoodsEditInfo"></GoodsTable>
+        </Col>
       </Row>
     </Card>
   </div>
 </template>
 <script>
 import GoodsTable from "./GoodsTable";
+import GoodsForm from "./GoodsForm";
 export default {
   name: "Goods",
   components: {
-    GoodsTable
+    GoodsTable,
+    GoodsForm
   },
   data () {
     return {
       showGoodsTableAction: true, // 是否显示GoodsTable 表格 action 列
       goodsEditInfo: null, // 储存 子组件 GoodsTable 里的 Table 点击编辑按钮时的行信息
-      goodsSearchValue: null, 
     }
   },
   watch: {

@@ -1,7 +1,7 @@
 <template>
   <div class="goods-table">
-    <Input class="search-input" suffix="ios-search" v-model="pSearchValue" placeholder="输入查询参数..." />
-    <Table border :columns="table_columns" :data="table_data">
+    <Input class="search-input" suffix="ios-search" v-model="searchValue" placeholder="输入查询参数..." />
+    <Table border :columns="table_columns" :data="table_data" :highlight-row="false" :disabled-hover="false">
       <template slot-scope="{ row }" slot="name">
         <strong>{{ row.name }}</strong>
       </template>
@@ -10,21 +10,33 @@
       <Button type="error" size="small" @click="action_del(row, index)">删除</Button>
     </template>
     </Table>
+
+    <!-- 对话框模块 -->
+    <Modal
+      v-model="editModal"
+      title="编辑对话框"
+      :mask-closable="false">
+      <GoodsForm></GoodsForm>
+    </Modal>
   </div>
 </template>
+
 <script>
+import GoodsForm from "./GoodsForm";
 export default {
   name: 'GoodsTable',
   props: {
     isShowActionCol: Boolean,
-    searchValue: String
+  },
+  components: {
+    GoodsForm
   },
   data () {
     return {
       table_columns: [
         {
           title: '#',
-          key: 'row_id',
+          type: 'index',
           align: 'center',
           width: 60
         },
@@ -72,16 +84,22 @@ export default {
       },
       table_data: [
         {
-          row_id: '123',
           id: '123456',
           name: 'goods name',
           prices: '12345.00',
           specs: '1*10',
           unit: '单位',
+          classify: '类别',
+        },
+        {
+          id: '123456',
+          name: 'goods name',
+          prices: '123456789.00',
+          specs: '1*10',
+          unit: '单位',
           classify: '类别'
         },
         {
-          row_id: '1',
           id: '123456',
           name: 'goods name',
           prices: '123456789.00',
@@ -91,7 +109,8 @@ export default {
         }
       ],
       pIsShowActionCol: this.isShowActionCol, // 获取 props isShowActionCol 从父组件传来的值
-      pSearchValue: this.searchValue, // 获取 props searchValue 从父组件传来的值
+      searchValue: null,
+      editModal: false
 
     }
   },
@@ -124,6 +143,7 @@ export default {
        *  row: 返回 表格 行所有信息
        *  index: 返回 表格 行 索引值
        */
+        this.editModal = true;
         this.$emit('goodsEditInfo', row); // 向父组件传送当前编辑行的信息
     },
     action_del: function (row, index) {
@@ -132,7 +152,7 @@ export default {
        * params:
        *  index: 返回 表格 行 索引值
        */
-
+      
       console.log(index);
     }
   }
