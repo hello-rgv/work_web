@@ -1,29 +1,11 @@
-# work_web
+# 工作应用 前端
 
-## Project setup
-```
-yarn install
-```
+## 依赖插件
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+Vue-cli 3.x
+iView 3.4.1
+axios 0.18.0
+vue-axios 2.1.4
 
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 服务端地址
+https://github.com/hello-rgv/work_servers
