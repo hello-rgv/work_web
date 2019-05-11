@@ -18,9 +18,9 @@
                 </Menu>
                 <div slot="trigger"></div>
             </Sider>
-            <Layout>
+            <Layout :style="{background: '#f8f8f9'}">
                 <Header class="header-bar"></Header>
-                <Content :style="{margin: '20px', background: '#fff', minHeight: '220px'}">
+                <Content :style="{margin: '20px', background: '#f8f8f9', minHeight: '220px'}">
                     <router-view />
                 </Content>
             </Layout>
@@ -51,7 +51,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     border: 1px solid #d7dde4;
-    background: #f5f7f9;
+    background: #f8f8f9;
     position: relative;
     border-radius: 4px;
     overflow: hidden;
