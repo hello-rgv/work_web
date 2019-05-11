@@ -8,7 +8,7 @@
       <Row>
         <!-- <Col span="6"></Col> -->
         <!-- <Col span="18"> -->
-          <GoodsTable :isShowActionCol="showGoodsTableAction" @goodsEditInfo="getGoodsEditInfo"></GoodsTable>
+          <GoodsTable :isShowActionCol="showGoodsTableAction" @goodsEditInfo="getGoodsEditInfo" :searchValue="goodsSearchValue"></GoodsTable>
         <!-- </Col> -->
       </Row>
     </Card>
@@ -25,6 +25,7 @@ export default {
     return {
       showGoodsTableAction: true, // 是否显示GoodsTable 表格 action 列
       goodsEditInfo: null, // 储存 子组件 GoodsTable 里的 Table 点击编辑按钮时的行信息
+      goodsSearchValue: null, 
     }
   },
   watch: {

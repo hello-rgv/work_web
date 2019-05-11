@@ -1,6 +1,6 @@
 <template>
   <div class="goods-table">
-    <Input class="search-input" suffix="ios-search" placeholder="输入查询参数..." />
+    <Input class="search-input" suffix="ios-search" v-model="pSearchValue" placeholder="输入查询参数..." />
     <Table border :columns="table_columns" :data="table_data">
       <template slot-scope="{ row }" slot="name">
         <strong>{{ row.name }}</strong>
@@ -16,7 +16,8 @@
 export default {
   name: 'GoodsTable',
   props: {
-    isShowActionCol: Boolean
+    isShowActionCol: Boolean,
+    searchValue: String
   },
   data () {
     return {
@@ -35,7 +36,7 @@ export default {
         },
         {
           title: '商品名称',
-          key: 'name',
+          slot: 'name',
           minWidth: 150
         },
         {
@@ -90,6 +91,13 @@ export default {
         }
       ],
       pIsShowActionCol: this.isShowActionCol, // 获取 props isShowActionCol 从父组件传来的值
+      pSearchValue: this.searchValue, // 获取 props searchValue 从父组件传来的值
+
+    }
+  },
+  watch: {
+    searchValue: function () {
+      this.pSearchValue = this.searchValue;
     }
   },
   mounted: function () {
