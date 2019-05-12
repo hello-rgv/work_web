@@ -1,3 +1,10 @@
+<!--
+ * @Author: Mr Bean
+ * @Date: 2019-05-11 17:05:57
+ * @LastEditors: Mr Bean
+ * @LastEditTime: 2019-05-12 11:20:01
+ * @Description: file content
+ -->
 <template>
   <div class="goods-form">
     <Form ref="formGoods" :model="formGoods" :rules="ruleGoods">
@@ -62,6 +69,9 @@ var rule_goods = {
 };
 export default {
   name: "GoodsForm",
+  props: {
+    status: String, // GoodsForm 状态 (add or edit)
+  },
   data() {
     return {
       formGoods: {
@@ -72,8 +82,42 @@ export default {
         unit: "",
         classify: ""
       },
-      ruleGoods: rule_goods
-    };
+      ruleGoods: rule_goods,
+      // status_add_or_edit: this.status,
+    }
+  },
+  watch: {
+    status_add_or_edit: function () {
+      if (this.status = 'add') {
+
+      } else if (this.status = 'edit') {
+
+      }
+    }
+  },
+  methods: {
+    form_reset: function (form_name) {
+      // 清空 form 数据
+      this.$refs[form_name].resetFields();
+    },
+    btn_save: function (form_name) {
+      // 提交 数据
+      this.$refs[form_name].validate((valid) => {
+        if (valid) {
+          this.$Message.success('表单验证成功!');
+        } else {
+          
+          this.$Message.error('表单验证失败!');
+        }
+      })
+    },
+    db_add: function () {
+      // 向服务器发送 数据库 添加 请求
+    },
+    db_edit: function () {
+      // 向服务器发送 数据库 更新 请求
+
+    }
   }
 };
 </script>

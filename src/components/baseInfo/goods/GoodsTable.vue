@@ -1,3 +1,10 @@
+<!--
+ * @Author: Mr Bean
+ * @Date: 2019-05-11 17:06:05
+ * @LastEditors: Mr Bean
+ * @LastEditTime: 2019-05-12 11:07:00
+ * @Description: file content
+ -->
 <template>
   <div class="goods-table">
     <Input class="search-input" suffix="ios-search" v-model="searchValue" placeholder="输入查询参数..." />
@@ -7,17 +14,17 @@
       </template>
     <template slot-scope="{ row, index }" slot="action">
       <Button type="primary" size="small" style="margin-right: 15px" @click="action_edit(row)">编辑</Button>
+      <Poptip
+        confirm
+        :title="del_tip_conetnt"
+        :transfer="true"
+        placement="left"
+        @on-ok="table_del_ok(row)"
+        @on-cancel="table_del_cancel">
       <Button type="error" size="small" @click="action_del(row, index)">删除</Button>
+    </Poptip>
     </template>
     </Table>
-
-    <!-- 对话框模块 -->
-    <Modal
-      v-model="editModal"
-      title="编辑对话框"
-      :mask-closable="false">
-      <GoodsForm></GoodsForm>
-    </Modal>
   </div>
 </template>
 
@@ -110,14 +117,13 @@ export default {
       ],
       pIsShowActionCol: this.isShowActionCol, // 获取 props isShowActionCol 从父组件传来的值
       searchValue: null,
-      editModal: false
-
+      del_tip_conetnt: null, // 点击删除按钮时出现的 询问内容
     }
   },
   watch: {
-    searchValue: function () {
-      this.pSearchValue = this.searchValue;
-    }
+    // searchValue: function () {
+    //   this.pSearchValue = this.searchValue;
+    // }
   },
   mounted: function () {
     // this.test();
@@ -146,14 +152,22 @@ export default {
         this.editModal = true;
         this.$emit('goodsEditInfo', row); // 向父组件传送当前编辑行的信息
     },
+
     action_del: function (row, index) {
       /**
        * 表格 action 列， 删除按钮 click 事件
        * params:
        *  index: 返回 表格 行 索引值
        */
-      
-      console.log(index);
+        this.del_tip_conetnt = '确定要删除 [ ' + row['name'] + ' ] 吗?';
+    },
+    table_del_ok: function (row) {
+      // 表格 action 删除按钮 提示框 点击 确定 时发生的事件
+      console.log(row['id']);
+    },
+    table_del_cancel: function () {
+      // 表格 action 删除按钮 提示框 点击 取消 时发生的事件
+
     }
   }
 }

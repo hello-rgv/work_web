@@ -1,3 +1,10 @@
+<!--
+ * @Author: Mr Bean
+ * @Date: 2019-05-11 17:05:47
+ * @LastEditors: Mr Bean
+ * @LastEditTime: 2019-05-12 11:12:19
+ * @Description: file content
+ -->
 <template>
   <div class="goods">
     <Card>
@@ -33,18 +40,22 @@ export default {
   },
   watch: {
     goodsEditInfo: function () {
-      console.log(this.goodsEditInfo);
+      // console.log(this.goodsEditInfo);
+      this.test();
     }
   },
   methods: {
     getGoodsEditInfo: function (row) {
       /**
-       * 获取 子组件 GoodsTable 里的 Table 点击编辑按钮时的行信息
+       * 获取 子组件 GoodsTable 里的 Table 点击编辑按钮时的行信息，并填充到GoodsForm
        * params:
        *  row: 行信息
        */
       this.goodsEditInfo = row;
     },
+    test: function() {
+      console.log('ajajajjaajjaja')
+    }
   }
 };
 </script>
