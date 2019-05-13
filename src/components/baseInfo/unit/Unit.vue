@@ -2,7 +2,7 @@
  * @Author: Mr Bean
  * @Date: 2019-05-12 11:23:20
  * @LastEditors: Mr Bean
- * @LastEditTime: 2019-05-12 17:47:25
+ * @LastEditTime: 2019-05-13 17:16:07
  * @Description: file content
  -->
 <template>
@@ -18,7 +18,7 @@
           <Input clearable prefix="ios-analytics" v-model="formUnit.name" placeholder="输入商品单位..."/>
         </FormItem>
         <FormItem>
-          <Button type="primary" icon="md-checkmark" @click="btn_save('formUnit')">保 存</Button>
+          <Button :type="btn_save_type" icon="md-checkmark" @click="btn_save('formUnit')">保 存</Button>
         </FormItem>
         <FormItem>
           <Button icon="md-close" @click="btn_cancel('formUnit')">取 消</Button>
@@ -106,7 +106,9 @@ export default {
       },
       ruleUnit: rule_unit,
       searchValue: null,
-      del_tip_conetnt: null
+      del_tip_conetnt: null, 
+      is_db_edit: false, // 判断当前状态是 编辑 还是 添加
+      btn_save_type: 'primary',
     };
   },
   methods: {
@@ -115,7 +117,14 @@ export default {
       this.$refs[form_name].validate(valid => {
         if (valid) {
           // this.$Message.success('表单验证成功!');
-          this.db_add();
+          if (this.is_db_edit) {
+            this.$Message.success('edit');
+            this.db_update();
+          } else {
+            this.$Message.success('add');
+            this.db_add();
+          }
+          this.is_db_edit = false;
         } else {
           this.$Message.error("表单验证失败!");
         }
@@ -124,6 +133,8 @@ export default {
     btn_cancel: function(form_name) {
       // 清空 form 数据
       this.$refs[form_name].resetFields();
+      this.is_db_edit = false;
+      this.btn_save_type = 'primary';
     },
     db_add: function() {
       let rqs_data = { name: this.formUnit.name };
@@ -144,7 +155,28 @@ export default {
         });
     },
     db_del: function() {},
-    db_update: function() {},
+    db_update: function() {
+      let rqs_data = {
+        update_data: this.formUnit
+      }
+
+      this.axios.post(this.Common.API_UNIT_URL + 'update', rqs_data)
+      .then (response => {
+        if (response['data']['status'] = 'success') {
+
+          this.btn_save_type = 'primary';
+          this.btn_cancel('formUnit');
+          this.$Message.success("数据更新操作成功!");
+        } else {
+            let rsp_error_msg = response["data"]["msg"];
+            this.$Message.error("数据更新操作失败! \n" + rsp_error_msg);
+        }
+      })
+      .catch (error => {
+        console.log(error);
+        this.$Message.error("向服务器请求失败!");
+      })
+    },
     db_search: function() {
       let rqs_data = { value: this.searchValue };
       this.axios
@@ -174,7 +206,12 @@ export default {
       this.del_tip_conetnt =
         "确定要删除商品单位为 [ " + row["name"] + " ] 的数据吗?";
     },
-    action_edit: function(row) {},
+    action_edit: function(row) {
+      this.is_db_edit = true;
+      this.btn_save_type = 'warning';
+      this.formUnit.id = row['id'];
+      this.formUnit.name = row['name'];
+    },
     table_del_ok: function(row) {
       // table 删除 询问 框 确定 按钮事件
     },
