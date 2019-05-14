@@ -2,26 +2,26 @@
  * @Author: Mr Bean
  * @Date: 2019-05-12 11:23:20
  * @LastEditors: Mr Bean
- * @LastEditTime: 2019-05-14 10:01:33
+ * @LastEditTime: 2019-05-14 09:48:31
  * @Description: file content
  -->
 <template>
-  <div class="customers">
+  <div class="classify">
     <Card>
       <p slot="title">
         <Icon type="ios-analytics"/>
-        <span>客户信息</span>
+        <span>商品类别信息</span>
       </p>
 
-      <Form class="form" inline ref="formCustomers" :model="formCustomers" :rules="ruleCustomers">
+      <Form class="form" inline ref="formClassify" :model="formClassify" :rules="ruleUnit">
         <FormItem class="search-item" prop="name">
-          <Input clearable prefix="ios-analytics" v-model="formCustomers.name" placeholder="输入客户名称..."/>
+          <Input clearable prefix="ios-analytics" v-model="formClassify.name" placeholder="输入商品类别..."/>
         </FormItem>
         <FormItem>
-          <Button :type="btn_save_type" icon="md-checkmark" @click="btn_save('formCustomers')">保 存</Button>
+          <Button :type="btn_save_type" icon="md-checkmark" @click="btn_save('formClassify')">保 存</Button>
         </FormItem>
         <FormItem>
-          <Button icon="md-close" @click="btn_cancel('formCustomers')">取 消</Button>
+          <Button icon="md-close" @click="btn_cancel('formClassify')">取 消</Button>
         </FormItem>
       </Form>
       <Divider dashed size="small"/>
@@ -66,11 +66,11 @@
   </div>
 </template>
 <script>
-var rule_customers = {
-  name: [{ required: true, message: "客户名称不能空", trigger: "blur" }]
+var rule_classify = {
+  name: [{ required: true, message: "商品类别名称不能空", trigger: "blur" }]
 };
 export default {
-  name: "Customers",
+  name: "Classify",
   data() {
     return {
       table_columns: [
@@ -87,7 +87,7 @@ export default {
           width: 100
         },
         {
-          title: "客户名称",
+          title: "类别名称",
           slot: "name",
           minWidth: 150
         },
@@ -100,11 +100,11 @@ export default {
         }
       ],
       table_data: [],
-      formCustomers: {
+      formClassify: {
         id: "",
         name: ""
       },
-      ruleCustomers: rule_customers,
+      ruleUnit: rule_classify,
       searchValue: null,
       del_tip_conetnt: null, 
       is_db_edit: false, // 判断当前状态是 编辑 还是 添加
@@ -137,14 +137,14 @@ export default {
       this.btn_save_type = 'primary';
     },
     db_add: function() {
-      let rqs_data = { name: this.formCustomers.name };
+      let rqs_data = { name: this.formClassify.name };
       this.axios
-        .post(this.Common.API_CUSTOMERS + "add", rqs_data)
+        .post(this.Common.API_CLASSIFY_URL + "add", rqs_data)
         .then(response => {
           let status = response["data"]["status"];
           if ((status = "success")) {
             this.$Message.success("数据添加操作成功!");
-            this.btn_cancel("formCustomers");
+            this.btn_cancel("formClassify");
           } else {
             let rsp_error_msg = response["data"]["msg"];
             this.$Message.error("数据添加操作失败! \n" + rsp_error_msg);
@@ -154,10 +154,10 @@ export default {
           this.$Message.error("向服务器请求失败!");
         });
     },
-    db_delete: function(customers_id) {
-      let rqs_data = {id: customers_id}
+    db_delete: function(unit_id) {
+      let rqs_data = {id: unit_id}
 
-      this.axios.post(this.Common.API_CUSTOMERS + 'delete', rqs_data)
+      this.axios.post(this.Common.API_CLASSIFY_URL + 'delete', rqs_data)
       .then(response => {
          if (response['data']['status'] = 'success') {
           this.$Message.success("数据删除操作成功!");
@@ -176,15 +176,15 @@ export default {
     },
     db_update: function() {
       let rqs_data = {
-        update_data: this.formCustomers
+        update_data: this.formClassify
       }
 
-      this.axios.post(this.Common.API_CUSTOMERS + 'update', rqs_data)
+      this.axios.post(this.Common.API_CLASSIFY_URL + 'update', rqs_data)
       .then (response => {
         if (response['data']['status'] = 'success') {
 
           this.btn_save_type = 'primary';
-          this.btn_cancel('formCustomers');
+          this.btn_cancel('formClassify');
           this.$Message.success("数据更新操作成功!");
         } else {
             let rsp_error_msg = response["data"]["msg"];
@@ -199,7 +199,7 @@ export default {
     db_search: function() {
       let rqs_data = { value: this.searchValue };
       this.axios
-        .post(this.Common.API_CUSTOMERS + "search", rqs_data)
+        .post(this.Common.API_CLASSIFY_URL + "search", rqs_data)
         .then(response => {
           let status = response["data"]["status"];
           let rsp_data = response["data"]["rsp_data"];
@@ -228,8 +228,8 @@ export default {
     action_edit: function(row) {
       this.is_db_edit = true;
       this.btn_save_type = 'warning';
-      this.formCustomers.id = row['id'];
-      this.formCustomers.name = row['name'];
+      this.formClassify.id = row['id'];
+      this.formClassify.name = row['name'];
     },
     table_del_ok: function(row, index) {
       // table 删除 询问 框 确定 按钮事件
@@ -245,7 +245,7 @@ export default {
 };
 </script>
 <style scoped>
-.customers {
+.classify {
   margin-top: 10px;
 }
 .form {

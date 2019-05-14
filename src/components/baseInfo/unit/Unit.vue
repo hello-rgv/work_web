@@ -2,7 +2,7 @@
  * @Author: Mr Bean
  * @Date: 2019-05-12 11:23:20
  * @LastEditors: Mr Bean
- * @LastEditTime: 2019-05-13 17:16:07
+ * @LastEditTime: 2019-05-14 09:12:49
  * @Description: file content
  -->
 <template>
@@ -55,7 +55,7 @@
             :title="del_tip_conetnt"
             :transfer="true"
             placement="left"
-            @on-ok="table_del_ok(row)"
+            @on-ok="table_del_ok(row, index)"
             @on-cancel="table_del_cancel"
           >
             <Button type="error" size="small" @click="action_del(row, index)">删除</Button>
@@ -118,10 +118,10 @@ export default {
         if (valid) {
           // this.$Message.success('表单验证成功!');
           if (this.is_db_edit) {
-            this.$Message.success('edit');
+            // this.$Message.success('edit');
             this.db_update();
           } else {
-            this.$Message.success('add');
+            // this.$Message.success('add');
             this.db_add();
           }
           this.is_db_edit = false;
@@ -154,7 +154,26 @@ export default {
           this.$Message.error("向服务器请求失败!");
         });
     },
-    db_del: function() {},
+    db_delete: function(unit_id) {
+      let rqs_data = {id: unit_id}
+
+      this.axios.post(this.Common.API_UNIT_URL + 'delete', rqs_data)
+      .then(response => {
+         if (response['data']['status'] = 'success') {
+          this.$Message.success("数据删除操作成功!");
+          return 'success'
+        } else {
+            let rsp_error_msg = response["data"]["msg"];
+            this.$Message.error("数据删除操作失败! \n" + rsp_error_msg);
+            return 'error'
+        }
+      })
+      .catch (error => {
+        console.log(error);
+        this.$Message.error("向服务器请求失败!");
+        return 'error'
+      })
+    },
     db_update: function() {
       let rqs_data = {
         update_data: this.formUnit
@@ -212,8 +231,12 @@ export default {
       this.formUnit.id = row['id'];
       this.formUnit.name = row['name'];
     },
-    table_del_ok: function(row) {
+    table_del_ok: function(row, index) {
       // table 删除 询问 框 确定 按钮事件
+      status = this.db_delete(row['id']);
+      if (status = 'success') {
+        this.table_data.splice(index, 1);
+      }
     },
     table_del_cancel: function() {
       // table 删除 询问 框 取消 按钮事件
